@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestGrammar {
+
   private String expectedGrammarTitle;
   private String expectedGrammarDesc;
   private List<String> expectedStart;
@@ -27,17 +28,17 @@ public class TestGrammar {
     expectedGrammarDesc = "A grammar that generates term papers. ";
     expectedStart = new ArrayList<>(
         List.of("<intro> ",
-                "<body1> ",
-                "<body2>",
-                "<conclusion> "));
+            "<body1> ",
+            "<body2>",
+            "<conclusion> "));
     expectedNonTerminal = new HashMap<>();
     testGrammar = new Grammar("Term Paper Generator",
         "A grammar that generates term papers. ",
         new ArrayList<String>(
-          List.of("<intro> ",
-                  "<body1> ",
-                  "<body2>",
-                  "<conclusion> "))
+            List.of("<intro> ",
+                "<body1> ",
+                "<body2>",
+                "<conclusion> "))
     );
     testGrammar1 = new Grammar("Term Paper Generator",
         "A grammar that generates term papers. ",
@@ -130,7 +131,8 @@ public class TestGrammar {
 
   @Test
   void TestToString() {
-    expectedToString = String.format("Grammar[grammarTitle: %s, grammarDesc: %s, start: %s, nonTerminalMap: %s]",
+    expectedToString = String.format(
+        "Grammar[grammarTitle: %s, grammarDesc: %s, start: %s, nonTerminalMap: %s]",
         expectedGrammarTitle,
         expectedGrammarDesc,
         expectedStart,
