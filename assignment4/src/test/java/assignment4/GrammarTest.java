@@ -11,7 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestGrammar {
+public class GrammarTest {
 
   private String expectedGrammarTitle;
   private String expectedGrammarDesc;
