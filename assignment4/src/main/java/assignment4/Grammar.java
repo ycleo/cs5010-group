@@ -13,6 +13,7 @@ import java.util.Objects;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Grammar {
+
   private String grammarTitle;
   private String grammarDesc;
   private List<String> start;
@@ -27,13 +28,14 @@ public class Grammar {
 
   /**
    * Constructor for helping the testing
+   *
    * @param grammarTitle grammar title
-   * @param grammarDesc grammar desc
-   * @param start start
+   * @param grammarDesc  grammar desc
+   * @param start        start
    */
   public Grammar(final String grammarTitle,
       final String grammarDesc,
-      final List<String> start){
+      final List<String> start) {
     this.grammarTitle = grammarTitle;
     this.grammarDesc = grammarDesc;
     this.start = start;
@@ -41,6 +43,7 @@ public class Grammar {
 
   /**
    * Get grammar desc
+   *
    * @return string
    */
   public String getGrammarDesc() {
@@ -49,6 +52,7 @@ public class Grammar {
 
   /**
    * get grammar title
+   *
    * @return string
    */
   public String getGrammarTitle() {
@@ -57,6 +61,7 @@ public class Grammar {
 
   /**
    * get non terminal map
+   *
    * @return non terminal map
    */
   public Map<String, List<String>> getNonTerminal() {
@@ -65,6 +70,7 @@ public class Grammar {
 
   /**
    * get start
+   *
    * @return start
    */
   public List<String> getStart() {
@@ -73,6 +79,7 @@ public class Grammar {
 
   /**
    * modify grammar desc
+   *
    * @param grammarDesc input grammar desc
    */
   public void modifyGrammarDesc(final String grammarDesc) {
@@ -81,6 +88,7 @@ public class Grammar {
 
   /**
    * modify grammar title
+   *
    * @param grammarTitle input grammar title
    */
   public void modifyGrammarTitle(final String grammarTitle) {
@@ -89,6 +97,7 @@ public class Grammar {
 
   /**
    * modify start
+   *
    * @param start input start
    */
   public void modifyStart(final List<String> start) {
@@ -97,6 +106,7 @@ public class Grammar {
 
   /**
    * validate grammar
+   *
    * @return boolean
    */
   public boolean validateGrammar() {
@@ -108,7 +118,8 @@ public class Grammar {
 
   /**
    * Add more entry in the non-terminal
-   * @param key key for the entry
+   *
+   * @param key   key for the entry
    * @param value the list of string
    */
   @JsonAnySetter
@@ -130,11 +141,13 @@ public class Grammar {
 
   /**
    * overridden to string method
+   *
    * @return string
    */
   @Override
   public String toString() {
-    return String.format("Grammar[grammarTitle: %s, grammarDesc: %s, start: %s, nonTerminalMap: %s]",
+    return String.format(
+        "Grammar[grammarTitle: %s, grammarDesc: %s, start: %s, nonTerminalMap: %s]",
         this.getGrammarTitle(),
         this.getGrammarDesc(),
         this.getStart(),
@@ -143,6 +156,7 @@ public class Grammar {
 
   /**
    * overridden equals method
+   *
    * @param obj the right obj
    * @return boolean
    */
@@ -164,6 +178,7 @@ public class Grammar {
 
   /**
    * overridden hashCode method
+   *
    * @return int
    */
   @Override

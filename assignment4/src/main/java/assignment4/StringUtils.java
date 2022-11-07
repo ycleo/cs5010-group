@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
  * The class for all string util class
  */
 public class StringUtils {
+
   private static final String QUIT = "q";
 
   /**
    * match the input with input regex
+   *
    * @param input input string
    * @param regex input regex
    * @return boolean
@@ -26,12 +28,14 @@ public class StringUtils {
 
   /**
    * Get matches string
-   * @param input input
-   * @param regex regex
+   *
+   * @param input      input
+   * @param regex      regex
    * @param parseRegex parse Regex
    * @return list of matched string
    */
-  public List<String> getMatchedString(final String input, final String regex, final String parseRegex) {
+  public List<String> getMatchedString(final String input, final String regex,
+      final String parseRegex) {
     final Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     final Matcher matcher = pattern.matcher(input);
     return matcher.results()
@@ -42,6 +46,7 @@ public class StringUtils {
 
   /**
    * match the quit command
+   *
    * @param input input
    * @return boolean
    */
@@ -51,6 +56,7 @@ public class StringUtils {
 
   /**
    * Check if input is number
+   *
    * @param input input
    * @return true if input is number
    */
