@@ -17,6 +17,7 @@ public class FileUtils {
 
   /**
    * Get all paths under the input path
+   *
    * @param path path
    * @return a list of paths that under the input path
    */
@@ -36,16 +37,14 @@ public class FileUtils {
 
   /**
    * this method is for reading the grammar file with the input path
+   *
    * @param path path
    * @return the grammar
    */
   public Grammar readGrammar(final String path) {
     try {
-      final String rawFile =  Files.readString(Paths.get(path));
+      final String rawFile = Files.readString(Paths.get(path));
       return new ObjectMapper().readValue(rawFile, Grammar.class);
-    } catch (final InvalidPathException ex) {
-      throw new InvalidJsonException(
-          String.format("Can not parse grammar file: %s", path), ex);
     } catch (final IOException ex) {
       throw new InvalidJsonException(
           String.format("Invalid path for reading grammar file: %s", path), ex);
