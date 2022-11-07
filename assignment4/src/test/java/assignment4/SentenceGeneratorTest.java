@@ -54,6 +54,14 @@ class SentenceGeneratorTest {
   @Test
   void generateSentences() {
     assertEquals("john\nhexa\na", sentenceGenerator.generateSentences(grammar));
+    start.add("<john>");
+    start.add("<hexa>");
+    start.add("<a>");
+    List<String> start2 = new ArrayList<>();
+    start2.add("hexa");
+    grammar = new Grammar("abc", "def", start);
+    grammar.setNonTerminal("hexa", start2);
+    assertEquals("john\nhexa\na\n\nhexa\n", sentenceGenerator.generateSentences(grammar));
   }
 
   @Test
