@@ -9,8 +9,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class SummaryGenerator {
+  final private String SLASH = "/";
+  final private String CSV_EXTENSION = ".csv";
+  final private String OUTPUT_ROW_FORMAT = "date, sum_click";
+  final private String COMMA = ",";
+  final private String NEXT_LINE = "\n";
+
   public void generateSummary(String summaryOutputPath, HashMap<String, Course> coursesMap)
       throws IOException {
 
@@ -21,17 +28,14 @@ public class SummaryGenerator {
       Map.Entry coursePair = (Map.Entry) courseIterator.next();
       String courseModuleAndPresentation = (String) coursePair.getKey();
       Course course = (Course) coursePair.getValue();
-      HashMap<Integer, Integer> dateToSumClicks = course.getDateToSumClicks();
+      TreeMap<Integer, Integer> dateToSumClicks = course.getDateToSumClicks();
       ArrayList<ArrayList<String>> dateSumClicksArray = mapToArray(dateToSumClicks);
-      FileWriter summaryWriter = new FileWriter(new File(summaryOutputPath + "/" + courseModuleAndPresentation + ".csv"));
-      summaryWriter.append("date");
-      summaryWriter.append(",");
-      summaryWriter.append("sum_click");
-      summaryWriter.append("\n");
+      FileWriter summaryWriter = new FileWriter(new File(summaryOutputPath + SLASH + courseModuleAndPresentation + CSV_EXTENSION));
+      summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
 
       for (ArrayList<String> rowData : dateSumClicksArray) {
-        summaryWriter.append(String.join(",", rowData));
-        summaryWriter.append("\n");
+        summaryWriter.append(String.join(COMMA, rowData));
+        summaryWriter.append(NEXT_LINE);
       }
       summaryWriter.flush();
       summaryWriter.close();
@@ -41,7 +45,7 @@ public class SummaryGenerator {
 
   }
 
-  private ArrayList<ArrayList<String>> mapToArray(HashMap<Integer, Integer> map) {
+  private ArrayList<ArrayList<String>> mapToArray(TreeMap<Integer, Integer> map) {
     ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
     Set entries = map.entrySet();
     Iterator entriesIterator = entries.iterator();

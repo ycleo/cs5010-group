@@ -9,8 +9,9 @@ import java.util.Scanner;
 public class FileReader {
   final private static String INFO_DELIMITER = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
   final private static String underline = "_";
-  final private static int ZERO = 0;
-  final private static int ONE = 1;
+  final public static int ZERO = 0;
+  final public static int ONE = 1;
+  final public static int TWO = 2;
   final private static int FOUR = 4;
   final private static int FIVE = 5;
   final private static String QUOTATION_MARK = "\"";
