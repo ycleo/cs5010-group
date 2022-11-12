@@ -17,4 +17,5 @@ public class Constants {
   final public static String CSV_EXTENSION = ".csv";
   final public static String OUTPUT_ROW_FORMAT = "date, sum_click";
   final public static String INFO_DELIMITER = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+  final public static String ILLEGAL_ARGUMENT_MESSAGE = "Please input correct argument number";
 }
