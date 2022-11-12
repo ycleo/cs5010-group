@@ -1,6 +1,7 @@
 package sequentialSolution;
 
 public class Constants {
+
   final public static int ZERO = 0;
   final public static int ONE = 1;
   final public static int TWO = 2;

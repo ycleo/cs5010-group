@@ -35,7 +35,8 @@ public class SummaryGenerator {
       TreeMap<Integer, Integer> dateToSumClicks = course.getDateToSumClicks();
       ArrayList<ArrayList<String>> dateSumClicksArray = mapToArray(dateToSumClicks);
 
-      FileWriter summaryWriter = new FileWriter(new File(summaryOutputPath + SLASH + courseModuleAndPresentation + CSV_EXTENSION));
+      FileWriter summaryWriter = new FileWriter(
+          new File(summaryOutputPath + SLASH + courseModuleAndPresentation + CSV_EXTENSION));
       summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
 
       for (ArrayList<String> rowData : dateSumClicksArray) {
@@ -53,13 +54,13 @@ public class SummaryGenerator {
     ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
     Set entries = map.entrySet();
     Iterator entriesIterator = entries.iterator();
-    while(entriesIterator.hasNext()){
+    while (entriesIterator.hasNext()) {
       Map.Entry mapping = (Map.Entry) entriesIterator.next();
       ArrayList<String> item = new ArrayList<>(
           List.of(
               String.valueOf(mapping.getKey()),
               String.valueOf(mapping.getValue()))
-          );
+      );
       arr.add(item);
     }
     return arr;
@@ -67,7 +68,7 @@ public class SummaryGenerator {
 
   @Override
   public boolean equals(Object o) {
-    if(this == o) {
+    if (this == o) {
       return true;
     }
     if (o == null || this.getClass() != o.getClass()) {
@@ -86,7 +87,7 @@ public class SummaryGenerator {
   @Override
   public String toString() {
     return "Summary Generator: { Summary Output Path: " + this.summaryOutputPath + "; "
-       + "Courses Map: " + this.coursesMap.toString() + " }";
+        + "Courses Map: " + this.coursesMap.toString() + " }";
   }
 
 }

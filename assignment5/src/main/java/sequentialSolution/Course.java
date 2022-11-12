@@ -38,7 +38,7 @@ public class Course {
 
   @Override
   public boolean equals(Object o) {
-    if(this == o) {
+    if (this == o) {
       return true;
     }
     if (o == null || this.getClass() != o.getClass()) {
@@ -53,7 +53,8 @@ public class Course {
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.codeModule, this.codePresentation, this.courseLength, this.dateToSumClicks);
+    return Objects.hash(this.codeModule, this.codePresentation, this.courseLength,
+        this.dateToSumClicks);
   }
 
   @Override

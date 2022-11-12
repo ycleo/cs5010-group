@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Main {
+
   static String coursesCsvPath;
   static String studentVleCsvPath;
   static String summaryOutputPath;
