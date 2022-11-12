@@ -1,5 +1,7 @@
 package sequentialSolution;
 
+import static sequentialSolution.Constants.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,11 +14,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class SummaryGenerator {
-  final private String SLASH = "/";
-  final private String CSV_EXTENSION = ".csv";
-  final private String OUTPUT_ROW_FORMAT = "date, sum_click";
-  final private String COMMA = ",";
-  final private String NEXT_LINE = "\n";
+
 
   public void generateSummary(String summaryOutputPath, HashMap<String, Course> coursesMap)
       throws IOException {

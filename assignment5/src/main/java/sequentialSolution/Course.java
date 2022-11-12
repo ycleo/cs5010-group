@@ -1,11 +1,8 @@
 package sequentialSolution;
 
 
-import static sequentialSolution.FileReader.ZERO;
-import static sequentialSolution.FileReader.ONE;
-import static sequentialSolution.FileReader.TWO;
+import static sequentialSolution.Constants.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
