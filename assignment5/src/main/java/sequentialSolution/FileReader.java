@@ -14,16 +14,18 @@ public class FileReader {
   private String[] courseFormat;
   private String[] studentVleFormat;
 
-  public void readCoursesCsv(String path, HashMap<String, Course> coursesMap) throws FileNotFoundException {
+  public void readCoursesCsv(String path, HashMap<String, Course> coursesMap)
+      throws FileNotFoundException {
     this.csvScanner = new Scanner(new File(path));
     this.courseFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
 //    for (String str : this.courseFormat) {
 //      System.out.println(str);
 //    }
-    while(this.csvScanner.hasNext()) {
+    while (this.csvScanner.hasNext()) {
       String[] courseInfo = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
       Course newCourse = new Course(courseInfo);
-      coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE], newCourse); // module_presentation
+      coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE],
+          newCourse); // module_presentation
     }
 //    for (Entry<String, Course> entry : coursesMap.entrySet()) {
 //      String key = entry.getKey();
@@ -32,10 +34,11 @@ public class FileReader {
     this.csvScanner.close();
   }
 
-  public void readStudentVleCsv(String path, HashMap<String, Course> coursesMap) throws FileNotFoundException {
+  public void readStudentVleCsv(String path, HashMap<String, Course> coursesMap)
+      throws FileNotFoundException {
     this.csvScanner = new Scanner(new File(path));
     this.studentVleFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
-    while(this.csvScanner.hasNext()) {
+    while (this.csvScanner.hasNext()) {
       String[] studentVle = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
 
       // Produce course's date and sum clicks
@@ -67,9 +70,10 @@ public class FileReader {
   public String[] getStudentVleFormat() {
     return this.studentVleFormat;
   }
+
   @Override
   public boolean equals(Object o) {
-    if(this == o) {
+    if (this == o) {
       return true;
     }
     if (o == null || this.getClass() != o.getClass()) {
