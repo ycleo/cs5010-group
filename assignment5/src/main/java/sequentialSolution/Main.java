@@ -14,7 +14,7 @@ public class Main {
 
   public static void main(String[] args) throws IOException {
     if (args.length != THREE) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException(ILLEGAL_ARGUMENT_MESSAGE);
     }
     coursesCsvPath = args[ZERO].trim();
     studentVleCsvPath = args[ONE].trim();
