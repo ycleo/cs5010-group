@@ -1,21 +1,14 @@
 package sequentialSolution;
 
+import static sequentialSolution.Constants.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class FileReader {
-  final private static String INFO_DELIMITER = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
-  final private static String underline = "_";
-  final public static int ZERO = 0;
-  final public static int ONE = 1;
-  final public static int TWO = 2;
-  final private static int FOUR = 4;
-  final private static int FIVE = 5;
-  final private static String QUOTATION_MARK = "\"";
-  final private static String EMPTY = "";
+
   private Scanner csvScanner;
   private String[] courseFormat;
   private String[] studentVleFormat;
@@ -31,7 +24,7 @@ public class FileReader {
     while(this.csvScanner.hasNext()) {
       String[] courseInfo = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
       Course newCourse = new Course(courseInfo);
-      coursesMap.put(courseInfo[ZERO] + underline + courseInfo[ONE], newCourse);
+      coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE], newCourse); // module_presentation
     }
 //    for (Entry<String, Course> entry : coursesMap.entrySet()) {
 //      String key = entry.getKey();
@@ -48,7 +41,7 @@ public class FileReader {
       String[] studentVle = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
 
       // Produce course's date and sum clicks
-      Course course = coursesMap.get(studentVle[ZERO] + underline + studentVle[ONE]);
+      Course course = coursesMap.get(studentVle[ZERO] + UNDERLINE + studentVle[ONE]);
       course.updateSumClicks(studentVle[FOUR], studentVle[FIVE]);
     }
     this.csvScanner.close();

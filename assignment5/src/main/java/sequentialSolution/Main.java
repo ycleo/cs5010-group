@@ -1,5 +1,10 @@
 package sequentialSolution;
 
+import static sequentialSolution.Constants.ONE;
+import static sequentialSolution.Constants.THREE;
+import static sequentialSolution.Constants.TWO;
+import static sequentialSolution.Constants.ZERO;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -10,9 +15,12 @@ public class Main {
   static HashMap<String, Course> coursesMap; // module_presentation -> Course Object
 
   public static void main(String[] args) throws IOException {
-    coursesCsvPath = args[0].trim();
-    studentVleCsvPath = args[1].trim();
-    summaryOutputPath = args[2].trim();
+    if (args.length != THREE) {
+      throw new IllegalArgumentException();
+    }
+    coursesCsvPath = args[ZERO].trim();
+    studentVleCsvPath = args[ONE].trim();
+    summaryOutputPath = args[TWO].trim();
     FileReader fileReader = new FileReader();
     SummaryGenerator summaryGenerator = new SummaryGenerator();
 
