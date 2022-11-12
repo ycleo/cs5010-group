@@ -1,9 +1,6 @@
 package sequentialSolution;
 
-import static sequentialSolution.Constants.ONE;
-import static sequentialSolution.Constants.THREE;
-import static sequentialSolution.Constants.TWO;
-import static sequentialSolution.Constants.ZERO;
+import static sequentialSolution.Constants.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,7 +9,7 @@ public class Main {
   static String coursesCsvPath;
   static String studentVleCsvPath;
   static String summaryOutputPath;
-  static HashMap<String, Course> coursesMap; // module_presentation -> Course Object
+  static HashMap<String, Course> coursesMap;
 
   public static void main(String[] args) throws IOException {
     if (args.length != THREE) {
@@ -21,11 +18,17 @@ public class Main {
     coursesCsvPath = args[ZERO].trim();
     studentVleCsvPath = args[ONE].trim();
     summaryOutputPath = args[TWO].trim();
+    coursesMap = new HashMap<>();
     FileReader fileReader = new FileReader();
-    SummaryGenerator summaryGenerator = new SummaryGenerator();
 
-    coursesMap = fileReader.readCoursesCsv(coursesCsvPath); // Read courses.csv and establish courses map
-    fileReader.readStudentVleCsv(studentVleCsvPath, coursesMap); // Sequentially read studentVle.csv and update the courses map
-    summaryGenerator.generateSummary(summaryOutputPath, coursesMap); // output the summary
+    // Read courses.csv and establish courses map
+    fileReader.readCoursesCsv(coursesCsvPath, coursesMap);
+
+    // Sequentially read studentVle.csv and update the courses map (sum clicks)
+    fileReader.readStudentVleCsv(studentVleCsvPath, coursesMap);
+
+    // output the summary
+    SummaryGenerator summaryGenerator = new SummaryGenerator(summaryOutputPath, coursesMap);
+    summaryGenerator.generateSummary();
   }
 }
