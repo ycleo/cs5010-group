@@ -18,19 +18,14 @@ public class FileReader {
       throws FileNotFoundException {
     this.csvScanner = new Scanner(new File(path));
     this.courseFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
-//    for (String str : this.courseFormat) {
-//      System.out.println(str);
-//    }
+
     while (this.csvScanner.hasNext()) {
       String[] courseInfo = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
       Course newCourse = new Course(courseInfo);
       coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE],
           newCourse); // module_presentation
     }
-//    for (Entry<String, Course> entry : coursesMap.entrySet()) {
-//      String key = entry.getKey();
-//      System.out.println(key);
-//    }
+
     this.csvScanner.close();
   }
 
