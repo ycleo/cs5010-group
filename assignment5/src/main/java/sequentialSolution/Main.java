@@ -1,11 +1,7 @@
 package sequentialSolution;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 
 public class Main {
   static String coursesCsvPath;
@@ -22,7 +18,6 @@ public class Main {
 
     coursesMap = fileReader.readCoursesCsv(coursesCsvPath); // Read courses.csv and establish courses map
     fileReader.readStudentVleCsv(studentVleCsvPath, coursesMap); // Sequentially read studentVle.csv and update the courses map
-    // output the summary
-    summaryGenerator.generateSummary(summaryOutputPath, coursesMap);
+    summaryGenerator.generateSummary(summaryOutputPath, coursesMap); // output the summary
   }
 }

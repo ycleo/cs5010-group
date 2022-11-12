@@ -1,19 +1,26 @@
 package sequentialSolution;
 
+
+import static sequentialSolution.FileReader.ZERO;
+import static sequentialSolution.FileReader.ONE;
+import static sequentialSolution.FileReader.TWO;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Course {
+
   private String codeModule;
   private String codePresentation;
   private String courseLength;
   private Map<Integer, Integer> dateToSumClicks;
 
   public Course(String[] courseInfo) {
-    this.codeModule = courseInfo[0];
-    this.codePresentation = courseInfo[1];
-    this.courseLength = courseInfo[2];
-    this.dateToSumClicks = new HashMap<>();
+    this.codeModule = courseInfo[ZERO];
+    this.codePresentation = courseInfo[ONE];
+    this.courseLength = courseInfo[TWO];
+    this.dateToSumClicks = new TreeMap<>();
   }
 
   public void updateSumClicks(String dateString, String sumClicksString) {
@@ -27,7 +34,7 @@ public class Course {
     }
   }
 
-  public HashMap<Integer, Integer> getDateToSumClicks() {
-    return (HashMap<Integer, Integer>) this.dateToSumClicks;
+  public TreeMap<Integer, Integer> getDateToSumClicks() {
+    return (TreeMap<Integer, Integer>) this.dateToSumClicks;
   }
 }
