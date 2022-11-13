@@ -5,6 +5,7 @@ import static sequentialSolution.Constants.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class FileReader {
   private String[] courseFormat;
   private String[] studentVleFormat;
 
-  public void readCoursesCsv(String path, HashMap<String, Course> coursesMap)
+  public void readCoursesCsv(String path, Map<String, Course> coursesMap)
       throws FileNotFoundException {
     this.csvScanner = new Scanner(new File(path));
     this.courseFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
@@ -29,7 +30,7 @@ public class FileReader {
     this.csvScanner.close();
   }
 
-  public void readStudentVleCsv(String path, HashMap<String, Course> coursesMap)
+  public void readStudentVleCsv(String path, Map<String, Course> coursesMap)
       throws FileNotFoundException {
     this.csvScanner = new Scanner(new File(path));
     this.studentVleFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
@@ -51,7 +52,7 @@ public class FileReader {
    * @param csvRow A certain row from the csv file
    * @return The row that the quotation marks of every element has been removed
    */
-  private String[] trimQuotationMark(String[] csvRow) {
+  public static String[] trimQuotationMark(String[] csvRow) {
     for (int i = ZERO; i < csvRow.length; i++) {
       csvRow[i] = csvRow[i].replaceAll(QUOTATION_MARK, EMPTY);
     }
@@ -91,4 +92,5 @@ public class FileReader {
         + "Course Format: " + this.courseFormat.toString() + "; "
         + "StudentVle Format: " + this.studentVleFormat.toString() + " }";
   }
+
 }
