@@ -14,11 +14,11 @@ public class Course {
   private String courseLength;
   private Map<Integer, Integer> dateToSumClicks;
 
-  public Course(String[] courseInfo) {
+  public Course(String[] courseInfo, Map<Integer, Integer> dateToSumClicks) {
     this.codeModule = courseInfo[ZERO];
     this.codePresentation = courseInfo[ONE];
     this.courseLength = courseInfo[TWO];
-    this.dateToSumClicks = new TreeMap<>();
+    this.dateToSumClicks = dateToSumClicks;
   }
 
   public void updateSumClicks(String dateString, String sumClicksString) {
@@ -27,13 +27,13 @@ public class Course {
     if (!this.dateToSumClicks.containsKey(date)) {
       this.dateToSumClicks.put(date, sumClicks);
     } else {
-      int prevSumClicks = this.dateToSumClicks.get(date);
+      Integer prevSumClicks = this.dateToSumClicks.get(date);
       this.dateToSumClicks.put(date, prevSumClicks + sumClicks);
     }
   }
 
-  public TreeMap<Integer, Integer> getDateToSumClicks() {
-    return (TreeMap<Integer, Integer>) this.dateToSumClicks;
+  public Map<Integer, Integer> getDateToSumClicks() {
+    return (Map<Integer, Integer>) this.dateToSumClicks;
   }
 
   @Override

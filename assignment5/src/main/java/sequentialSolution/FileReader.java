@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class FileReader {
 
@@ -21,7 +22,7 @@ public class FileReader {
 
     while (this.csvScanner.hasNext()) {
       String[] courseInfo = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
-      Course newCourse = new Course(courseInfo);
+      Course newCourse = new Course(courseInfo, new TreeMap<>());
       coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE],
           newCourse); // module_presentation
     }

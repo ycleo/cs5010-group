@@ -39,7 +39,7 @@ public class SummaryGenerator {
       summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
 
       // iterate the information tree map of the current course
-      TreeMap<Integer, Integer> dateToSumClicks = course.getDateToSumClicks();
+      Map<Integer, Integer> dateToSumClicks = course.getDateToSumClicks();
       for (Map.Entry<Integer, Integer> entry : dateToSumClicks.entrySet()) {
         String date = String.valueOf(entry.getKey());
         String sumClicks = String.valueOf(entry.getValue());
