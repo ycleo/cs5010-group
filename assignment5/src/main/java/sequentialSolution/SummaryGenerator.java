@@ -48,7 +48,6 @@ public class SummaryGenerator {
 
       summaryWriter.flush();
       summaryWriter.close();
-      courseIterator.remove();
     }
   }
 
