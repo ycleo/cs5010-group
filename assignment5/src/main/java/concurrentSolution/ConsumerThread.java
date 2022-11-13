@@ -34,14 +34,12 @@ public class ConsumerThread implements Runnable {
         String course = data.get(ZERO); // module_presentation
         String date = data.get(ONE);
         String sumClicks = data.get(TWO);
-        System.out.println(course);
-        this.courseConcurrentHashMap.get(course).updateSumClicks(date, sumClicks);
 
+        this.courseConcurrentHashMap.get(course).updateSumClicks(date, sumClicks);
         if (progress == "read done" && this.studentVleBlockingQueue.size() == 0) {
           generateSummary();
           break;
         }
-
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

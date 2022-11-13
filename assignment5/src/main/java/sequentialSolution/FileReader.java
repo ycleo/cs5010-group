@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class FileReader {
 
@@ -22,7 +23,7 @@ public class FileReader {
 
     while (this.csvScanner.hasNext()) {
       String[] courseInfo = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
-      Course newCourse = new Course(courseInfo, new TreeMap<>());
+      Course newCourse = new Course(courseInfo, new ConcurrentSkipListMap<>());
       coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE],
           newCourse); // module_presentation
     }
