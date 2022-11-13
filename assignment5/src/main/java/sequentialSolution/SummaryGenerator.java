@@ -17,9 +17,9 @@ import java.util.TreeMap;
 public class SummaryGenerator {
 
   private String summaryOutputPath;
-  private HashMap<String, Course> coursesMap;
+  private Map<String, Course> coursesMap;
 
-  public SummaryGenerator(String summaryOutputPath, HashMap<String, Course> coursesMap) {
+  public SummaryGenerator(String summaryOutputPath, Map<String, Course> coursesMap) {
     this.summaryOutputPath = summaryOutputPath;
     this.coursesMap = coursesMap;
   }
