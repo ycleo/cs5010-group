@@ -1,13 +1,19 @@
 package sequentialSolution;
 
-import static sequentialSolution.Constants.*;
+import static sequentialSolution.Constants.EMPTY;
+import static sequentialSolution.Constants.FIVE;
+import static sequentialSolution.Constants.FOUR;
+import static sequentialSolution.Constants.INFO_DELIMITER;
+import static sequentialSolution.Constants.ONE;
+import static sequentialSolution.Constants.QUOTATION_MARK;
+import static sequentialSolution.Constants.UNDERLINE;
+import static sequentialSolution.Constants.ZERO;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DatasetReader {

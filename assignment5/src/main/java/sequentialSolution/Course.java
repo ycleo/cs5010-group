@@ -1,11 +1,12 @@
 package sequentialSolution;
 
 
-import static sequentialSolution.Constants.*;
+import static sequentialSolution.Constants.ONE;
+import static sequentialSolution.Constants.TWO;
+import static sequentialSolution.Constants.ZERO;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 public class Course {
 

@@ -1,17 +1,18 @@
 package sequentialSolution;
 
-import static sequentialSolution.Constants.*;
+import static sequentialSolution.Constants.COMMA;
+import static sequentialSolution.Constants.CSV_EXTENSION;
+import static sequentialSolution.Constants.NEXT_LINE;
+import static sequentialSolution.Constants.OUTPUT_ROW_FORMAT;
+import static sequentialSolution.Constants.QUOTE;
+import static sequentialSolution.Constants.SLASH;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class SummaryGenerator {
@@ -39,7 +40,7 @@ public class SummaryGenerator {
       summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
 
       // iterate the information tree map of the current course
-      Map<Integer, Integer> dateToSumClicks = course.getDateToSumClicks();
+      TreeMap<Integer, Integer> dateToSumClicks = new TreeMap<>(course.getDateToSumClicks());
       for (Map.Entry<Integer, Integer> entry : dateToSumClicks.entrySet()) {
         String date = String.valueOf(entry.getKey());
         String sumClicks = String.valueOf(entry.getValue());
