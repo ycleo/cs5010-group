@@ -8,9 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 
-public class FileReader {
+public class DatasetReader {
 
   private Scanner csvScanner;
   private String[] courseFormat;
@@ -23,7 +22,7 @@ public class FileReader {
 
     while (this.csvScanner.hasNext()) {
       String[] courseInfo = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
-      Course newCourse = new Course(courseInfo, new ConcurrentSkipListMap<>());
+      Course newCourse = new Course(courseInfo, new TreeMap<>());
       coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE],
           newCourse); // module_presentation
     }
@@ -76,10 +75,10 @@ public class FileReader {
     if (o == null || this.getClass() != o.getClass()) {
       return false;
     }
-    FileReader fileReader = (FileReader) o;
-    return Objects.equals(this.csvScanner, fileReader.csvScanner) ||
-        Objects.equals(this.courseFormat, fileReader.courseFormat) ||
-        Objects.equals(this.studentVleFormat, fileReader.studentVleFormat);
+    DatasetReader datasetReader = (DatasetReader) o;
+    return Objects.equals(this.csvScanner, datasetReader.csvScanner) ||
+        Objects.equals(this.courseFormat, datasetReader.courseFormat) ||
+        Objects.equals(this.studentVleFormat, datasetReader.studentVleFormat);
   }
 
   @Override

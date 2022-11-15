@@ -20,13 +20,13 @@ public class Main {
     studentVleCsvPath = args[ONE].trim();
     summaryOutputPath = args[TWO].trim();
     coursesMap = new HashMap<>();
-    FileReader fileReader = new FileReader();
+    DatasetReader datasetReader = new DatasetReader();
 
     // Read courses.csv and establish courses map
-    fileReader.readCoursesCsv(coursesCsvPath, coursesMap);
+    datasetReader.readCoursesCsv(coursesCsvPath, coursesMap);
 
     // Sequentially read studentVle.csv and update the courses map (sum clicks)
-    fileReader.readStudentVleCsv(studentVleCsvPath, coursesMap);
+    datasetReader.readStudentVleCsv(studentVleCsvPath, coursesMap);
 
     // output the summary
     SummaryGenerator summaryGenerator = new SummaryGenerator(summaryOutputPath, coursesMap);

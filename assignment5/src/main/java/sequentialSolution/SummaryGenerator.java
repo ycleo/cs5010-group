@@ -43,7 +43,7 @@ public class SummaryGenerator {
       for (Map.Entry<Integer, Integer> entry : dateToSumClicks.entrySet()) {
         String date = String.valueOf(entry.getKey());
         String sumClicks = String.valueOf(entry.getValue());
-        summaryWriter.append(date + COMMA + sumClicks + NEXT_LINE);
+        summaryWriter.append(QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks + QUOTE + NEXT_LINE);
       }
 
       summaryWriter.flush();
