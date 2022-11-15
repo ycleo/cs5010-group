@@ -1,18 +1,10 @@
 package concurrentSolution;
 
-//import static concurrentSolution.Driver.dataSum;
-
 import static concurrentSolution.Driver.readFinished;
 import static concurrentSolution.Driver.summaryGenerated;
-import static sequentialSolution.Constants.COMMA;
-import static sequentialSolution.Constants.CSV_EXTENSION;
-import static sequentialSolution.Constants.NEXT_LINE;
-import static sequentialSolution.Constants.ONE;
-import static sequentialSolution.Constants.OUTPUT_ROW_FORMAT;
-import static sequentialSolution.Constants.QUOTE;
-import static sequentialSolution.Constants.SLASH;
-import static sequentialSolution.Constants.TWO;
-import static sequentialSolution.Constants.ZERO;
+import static concurrentSolution.Driver.summaryOutputPath;
+import static concurrentSolution.Driver.threshold;
+import static sequentialSolution.Constants.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,19 +17,15 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import sequentialSolution.SummaryGenerator;
 
 public class ConsumerThread implements Runnable {
 
-  private String summaryOutputPath;
-  private SummaryGenerator summaryGenerator;
   private BlockingDeque<ArrayList<String>> studentVleBlockingQueue;
   private Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap;
 
-  public ConsumerThread(String summaryOutputPath,
+  public ConsumerThread(
       BlockingDeque<ArrayList<String>> studentVleBlockingQueue,
       Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap) {
-    this.summaryOutputPath = summaryOutputPath;
     this.studentVleBlockingQueue = studentVleBlockingQueue;
     this.coursesMap = coursesMap;
   }
@@ -101,14 +89,23 @@ public class ConsumerThread implements Runnable {
       FileWriter summaryWriter = new FileWriter(
           new File(summaryOutputPath + SLASH + courseName + CSV_EXTENSION));
       summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
+      FileWriter thresholdReportWriter = new FileWriter(new File(summaryOutputPath + SLASH + ACTIVITY_PREFIX + threshold + CSV_EXTENSION));
+      thresholdReportWriter.append(THRESHOLD_REPORT_ROW_FORMAT + NEXT_LINE);
 
       for (Map.Entry<String, Integer> entry : courseData.entrySet()) {
         String date = entry.getKey();
-        String sumClicks = String.valueOf(entry.getValue());
+        Integer sumClicksNum = entry.getValue();
+        String sumClicks = String.valueOf(sumClicksNum);
         summaryWriter.append(QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks + QUOTE + NEXT_LINE);
+
+        if (sumClicksNum >= Integer.parseInt(threshold)) {
+          thresholdReportWriter.append(QUOTE + courseName + QUOTE + COMMA + QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks + QUOTE + NEXT_LINE);
+        }
       }
       summaryWriter.flush();
       summaryWriter.close();
+      thresholdReportWriter.flush();
+      thresholdReportWriter.close();
     }
   }
 }

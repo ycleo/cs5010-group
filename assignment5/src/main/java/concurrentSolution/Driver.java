@@ -1,5 +1,7 @@
 package concurrentSolution;
 
+import static sequentialSolution.Constants.FIVE;
+import static sequentialSolution.Constants.FOUR;
 import static sequentialSolution.Constants.INFO_DELIMITER;
 import static sequentialSolution.Constants.ONE;
 import static sequentialSolution.Constants.THREE;
@@ -22,35 +24,34 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Driver {
 
-  static String coursesCsvPath;
-  static String studentVleCsvPath;
-  static String summaryOutputPath;
+  public static String coursesCsvPath;
+  public static String studentVleCsvPath;
+  public static String summaryOutputPath;
+  public static String threshold;
   public static boolean readFinished;
   public static boolean summaryGenerated;
-//  public static int dataSum;
-
 
   public static void main(String[] args) throws IOException, InterruptedException {
     readFinished = false;
     summaryGenerated = false;
-    if (args.length != THREE) {
+    if (args.length != FOUR) {
       throw new IllegalArgumentException();
     }
     coursesCsvPath = args[ZERO].trim();
     studentVleCsvPath = args[ONE].trim();
     summaryOutputPath = args[TWO].trim();
-    BlockingDeque<ArrayList<String>> studentVleBlockingQueue = new LinkedBlockingDeque<>(10);
+    threshold = args[THREE].trim();
+
+    BlockingDeque<ArrayList<String>> studentVleBlockingQueue = new LinkedBlockingDeque<>(FIVE);
     HashMap<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap = new HashMap<>(); // module_presentation -> { date -> sum clicks }
 
     // Read courses.csv and establish courses map
     readCourses(coursesCsvPath, coursesMap);
 
     // Concurrently read studentVle.csv and update the courses map (sum clicks)
-    Thread producer = new Thread(new ProducerThread(studentVleCsvPath, studentVleBlockingQueue));
-    Thread consumer1 = new Thread(
-        new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, coursesMap));
-    Thread consumer2 = new Thread(
-        new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, coursesMap));
+    Thread producer = new Thread(new ProducerThread(studentVleBlockingQueue));
+    Thread consumer1 = new Thread(new ConsumerThread(studentVleBlockingQueue, coursesMap));
+    Thread consumer2 = new Thread(new ConsumerThread(studentVleBlockingQueue, coursesMap));
 
     producer.start();
     consumer1.start();

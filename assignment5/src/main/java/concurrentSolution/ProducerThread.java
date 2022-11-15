@@ -1,8 +1,7 @@
 package concurrentSolution;
 
-//import static concurrentSolution.Driver.dataSum;
-
 import static concurrentSolution.Driver.readFinished;
+import static concurrentSolution.Driver.studentVleCsvPath;
 import static sequentialSolution.Constants.*;
 import static sequentialSolution.DatasetReader.trimQuotationMark;
 
@@ -15,14 +14,11 @@ import java.util.concurrent.BlockingDeque;
 
 public class ProducerThread implements Runnable {
 
-  private String studentVleCsvPath;
   private BlockingDeque<ArrayList<String>> studentVleBlockingQueue;
   private Scanner csvScanner;
   private String[] studentVleFormat;
 
-  public ProducerThread(String studentVleCsvPath,
-      BlockingDeque<ArrayList<String>> studentVleBlockingQueue) {
-    this.studentVleCsvPath = studentVleCsvPath;
+  public ProducerThread(BlockingDeque<ArrayList<String>> studentVleBlockingQueue) {
     this.studentVleBlockingQueue = studentVleBlockingQueue;
   }
 
@@ -30,7 +26,7 @@ public class ProducerThread implements Runnable {
   public void run() {
     System.out.println("Starting data producer");
     try {
-      this.csvScanner = new Scanner(new File(this.studentVleCsvPath));
+      this.csvScanner = new Scanner(new File(studentVleCsvPath));
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }
@@ -49,7 +45,6 @@ public class ProducerThread implements Runnable {
         );
 
         this.studentVleBlockingQueue.put(data);
-//        dataSum++;
         System.out.println(data + " was produced");
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
