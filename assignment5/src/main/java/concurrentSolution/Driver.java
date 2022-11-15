@@ -46,7 +46,7 @@ public class Driver {
     threshold = args[THREE].trim();
 
     BlockingDeque<ArrayList<String>> studentVleBlockingQueue = new LinkedBlockingDeque<>(FIVE);
-    HashMap<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap = new HashMap<>(); // module_presentation -> { date -> sum clicks }
+    HashMap<String, ConcurrentHashMap<Integer, AtomicInteger>> coursesMap = new HashMap<>(); // module_presentation -> { date -> sum clicks }
 
     // Read courses.csv and establish courses map
     readCourses(coursesCsvPath, coursesMap);
@@ -69,7 +69,7 @@ public class Driver {
    * @throws FileNotFoundException exception when the file can not be found
    */
   public static void readCourses(String path,
-      Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap)
+      Map<String, ConcurrentHashMap<Integer, AtomicInteger>> coursesMap)
       throws FileNotFoundException {
     Scanner csvScanner = new Scanner(new File(path));
     String[] courseFormat = trimQuotationMark(csvScanner.nextLine().split(INFO_DELIMITER));
