@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -25,8 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ConsumerThread implements Runnable {
 
-  private BlockingDeque<ArrayList<String>> studentVleBlockingQueue;
-  private Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap;
+  private final BlockingDeque<ArrayList<String>> studentVleBlockingQueue;
+  private final Map<String, ConcurrentHashMap<Integer, AtomicInteger>> coursesMap;
 
   /**
    * Constructs the consumer thread object
@@ -38,7 +37,7 @@ public class ConsumerThread implements Runnable {
    */
   public ConsumerThread(
       BlockingDeque<ArrayList<String>> studentVleBlockingQueue,
-      Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap) {
+      Map<String, ConcurrentHashMap<Integer, AtomicInteger>> coursesMap) {
     this.studentVleBlockingQueue = studentVleBlockingQueue;
     this.coursesMap = coursesMap;
   }
@@ -66,9 +65,9 @@ public class ConsumerThread implements Runnable {
         }
         System.out.println(data + " has been consumed");
         String courseName = data.get(ZERO); // module_presentation
-        String date = data.get(ONE);
-        Integer sumClicks = Integer.valueOf(data.get(TWO));
-        ConcurrentHashMap<String, AtomicInteger> courseData = this.coursesMap.get(courseName);
+        int date = Integer.parseInt(data.get(ONE));
+        int sumClicks = Integer.parseInt(data.get(TWO));
+        ConcurrentHashMap<Integer, AtomicInteger> courseData = this.coursesMap.get(courseName);
 
         if (courseData.putIfAbsent(date, new AtomicInteger(sumClicks)) != null) {
           courseData.get(date).addAndGet(sumClicks);
@@ -103,30 +102,35 @@ public class ConsumerThread implements Runnable {
     thresholdReportWriter.append(THRESHOLD_REPORT_ROW_FORMAT + NEXT_LINE);
     System.out.println("consumer " + Thread.currentThread().getId() + " output summary!");
 
-    Iterator<Entry<String, ConcurrentHashMap<String, AtomicInteger>>> courseIterator = this.coursesMap.entrySet()
-        .iterator();
-    while (courseIterator.hasNext()) {
-      Map.Entry coursePair = (Map.Entry) courseIterator.next();
-
-      String courseName = (String) coursePair.getKey();
-      ConcurrentHashMap<String, AtomicInteger> courseData = (ConcurrentHashMap<String, AtomicInteger>) coursePair.getValue();
-
+    for (Entry<String, ConcurrentHashMap<Integer, AtomicInteger>> courseEntry : this.coursesMap.entrySet()) {
+      String courseName = courseEntry.getKey();
+      ConcurrentHashMap<Integer, AtomicInteger> courseData = courseEntry.getValue();
       FileWriter summaryWriter = new FileWriter(
           new File(summaryOutputPath + SLASH + courseName + CSV_EXTENSION));
       summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
 
-      for (Map.Entry<String, AtomicInteger> entry : courseData.entrySet()) {
-        String date = entry.getKey();
-        int sumClicksNum = entry.getValue().intValue();
-        String sumClicks = String.valueOf(sumClicksNum);
-        summaryWriter.append(QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks + QUOTE + NEXT_LINE);
-
-        if (sumClicksNum >= Integer.parseInt(threshold)) {
-          thresholdReportWriter.append(
-              QUOTE + courseName + QUOTE + COMMA + QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks
-                  + QUOTE + NEXT_LINE);
+      courseData.entrySet().stream().sorted(Entry.comparingByKey()).forEach(entry -> {
+        int date = entry.getKey();
+        int sumClicks = entry.getValue().intValue();
+        try {
+          summaryWriter.append(
+              QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks + QUOTE + NEXT_LINE);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
         }
-      }
+
+        if (sumClicks >= Integer.parseInt(threshold)) {
+          try {
+            thresholdReportWriter.append(
+                QUOTE + courseName + QUOTE + COMMA + QUOTE + date + QUOTE + COMMA + QUOTE
+                    + sumClicks
+                    + QUOTE + NEXT_LINE);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }
+      });
+
       summaryWriter.flush();
       summaryWriter.close();
     }

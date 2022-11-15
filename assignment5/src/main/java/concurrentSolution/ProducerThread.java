@@ -19,7 +19,7 @@ import java.util.concurrent.BlockingDeque;
  */
 public class ProducerThread implements Runnable {
 
-  private BlockingDeque<ArrayList<String>> studentVleBlockingQueue;
+  private final BlockingDeque<ArrayList<String>> studentVleBlockingQueue;
   private Scanner csvScanner;
   private String[] studentVleFormat;
 
@@ -85,7 +85,7 @@ public class ProducerThread implements Runnable {
     ProducerThread producerThread = (ProducerThread) o;
     return Objects.equals(this.studentVleBlockingQueue, producerThread.studentVleBlockingQueue) ||
         Objects.equals(this.csvScanner, producerThread.csvScanner) ||
-        Objects.equals(this.studentVleFormat, producerThread.studentVleFormat);
+        Arrays.equals(this.studentVleFormat, producerThread.studentVleFormat);
   }
 
   /**
@@ -95,7 +95,8 @@ public class ProducerThread implements Runnable {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(this.studentVleBlockingQueue, this.csvScanner, this.studentVleFormat);
+    return Objects.hash(this.studentVleBlockingQueue, this.csvScanner,
+        Arrays.hashCode(this.studentVleFormat));
   }
 
   /**
