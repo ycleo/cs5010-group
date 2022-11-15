@@ -1,13 +1,6 @@
 package concurrentSolution;
 
-import static sequentialSolution.Constants.FIVE;
-import static sequentialSolution.Constants.FOUR;
-import static sequentialSolution.Constants.INFO_DELIMITER;
-import static sequentialSolution.Constants.ONE;
-import static sequentialSolution.Constants.THREE;
-import static sequentialSolution.Constants.TWO;
-import static sequentialSolution.Constants.UNDERLINE;
-import static sequentialSolution.Constants.ZERO;
+import static sequentialSolution.Constants.*;
 import static sequentialSolution.DatasetReader.trimQuotationMark;
 
 import java.io.File;
@@ -22,6 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The driver class that runs the main function of the program
+ */
 public class Driver {
 
   public static String coursesCsvPath;
@@ -31,7 +27,14 @@ public class Driver {
   public static boolean readFinished;
   public static boolean summaryGenerated;
 
-  public static void main(String[] args) throws IOException, InterruptedException {
+  /**
+   * The main function of the program that processes the CSV files and output the summary
+   *
+   * @param args arguments that contains the paths of input CSV files, output directory, and the
+   *             threshold value
+   * @throws IOException exception when the I/O operation is failed or interrupted
+   */
+  public static void main(String[] args) throws IOException {
     readFinished = false;
     summaryGenerated = false;
     if (args.length != FOUR) {
@@ -58,6 +61,13 @@ public class Driver {
     consumer2.start();
   }
 
+  /**
+   * Reads and processes the course.csv file to establish the courses map
+   *
+   * @param path       the path of the course.csv file
+   * @param coursesMap courses map that contains course name and corresponding course information
+   * @throws FileNotFoundException exception when the file can not be found
+   */
   public static void readCourses(String path,
       Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap)
       throws FileNotFoundException {
