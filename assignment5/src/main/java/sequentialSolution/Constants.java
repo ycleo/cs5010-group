@@ -30,6 +30,10 @@ public class Constants {
    */
   final public static int FIVE = 5;
   /**
+   * Integer one thousand
+   */
+  final public static int ONE_THOUSAND = 1000;
+  /**
    * String empty
    */
   final public static String EMPTY = "";
