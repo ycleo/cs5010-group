@@ -1,6 +1,7 @@
 package concurrentSolution;
 
 //import static concurrentSolution.Driver.dataSum;
+
 import static concurrentSolution.Driver.readFinished;
 import static sequentialSolution.Constants.*;
 import static sequentialSolution.DatasetReader.trimQuotationMark;
@@ -19,7 +20,8 @@ public class ProducerThread implements Runnable {
   private Scanner csvScanner;
   private String[] studentVleFormat;
 
-  public ProducerThread(String studentVleCsvPath, BlockingDeque<ArrayList<String>> studentVleBlockingQueue) {
+  public ProducerThread(String studentVleCsvPath,
+      BlockingDeque<ArrayList<String>> studentVleBlockingQueue) {
     this.studentVleCsvPath = studentVleCsvPath;
     this.studentVleBlockingQueue = studentVleBlockingQueue;
   }
@@ -48,7 +50,7 @@ public class ProducerThread implements Runnable {
 
         this.studentVleBlockingQueue.put(data);
 //        dataSum++;
-        System.out.println(data);
+        System.out.println(data + " was produced");
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }

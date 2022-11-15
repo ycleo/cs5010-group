@@ -1,14 +1,24 @@
 package concurrentSolution;
 
-import static sequentialSolution.Constants.*;
+import static sequentialSolution.Constants.INFO_DELIMITER;
+import static sequentialSolution.Constants.ONE;
+import static sequentialSolution.Constants.THREE;
+import static sequentialSolution.Constants.TWO;
+import static sequentialSolution.Constants.UNDERLINE;
+import static sequentialSolution.Constants.ZERO;
+import static sequentialSolution.DatasetReader.trimQuotationMark;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
-import sequentialSolution.Course;
-import sequentialSolution.DatasetReader;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Driver {
 
@@ -30,22 +40,32 @@ public class Driver {
     studentVleCsvPath = args[ONE].trim();
     summaryOutputPath = args[TWO].trim();
     BlockingDeque<ArrayList<String>> studentVleBlockingQueue = new LinkedBlockingDeque<>(10);
-    ConcurrentHashMap<String, Course> courseConcurrentHashMap = new ConcurrentHashMap<>();
+    HashMap<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap = new HashMap<>(); // module_presentation -> { date -> sum clicks }
 
     // Read courses.csv and establish courses map
-    DatasetReader datasetReader = new DatasetReader();
-    datasetReader.readCoursesCsv(coursesCsvPath, courseConcurrentHashMap);
+    readCourses(coursesCsvPath, coursesMap);
 
     // Concurrently read studentVle.csv and update the courses map (sum clicks)
-    Thread dataProducer = new Thread(new ProducerThread(studentVleCsvPath, studentVleBlockingQueue));
-    Thread dataConsumer1 = new Thread(new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, courseConcurrentHashMap));
-    Thread dataConsumer2 = new Thread(new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, courseConcurrentHashMap));
-    Thread dataConsumer3 = new Thread(new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, courseConcurrentHashMap));
+    Thread producer = new Thread(new ProducerThread(studentVleCsvPath, studentVleBlockingQueue));
+    Thread consumer1 = new Thread(
+        new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, coursesMap));
+    Thread consumer2 = new Thread(
+        new ConsumerThread(summaryOutputPath, studentVleBlockingQueue, coursesMap));
 
-    dataProducer.start();
-    dataConsumer1.start();
-    dataConsumer2.start();
-    dataConsumer3.start();
+    producer.start();
+    consumer1.start();
+    consumer2.start();
+  }
 
+  public static void readCourses(String path,
+      Map<String, ConcurrentHashMap<String, AtomicInteger>> coursesMap)
+      throws FileNotFoundException {
+    Scanner csvScanner = new Scanner(new File(path));
+    String[] courseFormat = trimQuotationMark(csvScanner.nextLine().split(INFO_DELIMITER));
+
+    while (csvScanner.hasNext()) {
+      String[] courseInfo = trimQuotationMark(csvScanner.nextLine().split(INFO_DELIMITER));
+      coursesMap.put(courseInfo[ZERO] + UNDERLINE + courseInfo[ONE], new ConcurrentHashMap<>());
+    }
   }
 }
