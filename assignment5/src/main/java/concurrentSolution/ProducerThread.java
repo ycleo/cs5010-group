@@ -1,8 +1,9 @@
 package concurrentSolution;
 
-import static concurrentSolution.Driver.progress;
+//import static concurrentSolution.Driver.dataSum;
+import static concurrentSolution.Driver.readFinished;
 import static sequentialSolution.Constants.*;
-import static sequentialSolution.FileReader.trimQuotationMark;
+import static sequentialSolution.DatasetReader.trimQuotationMark;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,7 +34,7 @@ public class ProducerThread implements Runnable {
     }
     this.studentVleFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
     while (this.csvScanner.hasNext()) {
-//      System.out.println("Producer is awake");
+      System.out.println("Producer is awake");
       try {
         String[] studentVle = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
 
@@ -46,10 +47,13 @@ public class ProducerThread implements Runnable {
         );
 
         this.studentVleBlockingQueue.put(data);
+//        dataSum++;
+        System.out.println(data);
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
     }
-    progress = "read done";
+    readFinished = true;
+    System.out.println("Producer done");
   }
 }
