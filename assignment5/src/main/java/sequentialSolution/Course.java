@@ -8,6 +8,9 @@ import static sequentialSolution.Constants.ZERO;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Class Course that stores the course information
+ */
 public class Course {
 
   private String codeModule;
@@ -15,6 +18,13 @@ public class Course {
   private String courseLength;
   private Map<Integer, Integer> dateToSumClicks;
 
+  /**
+   * Constructs the Course object
+   *
+   * @param courseInfo      String array that stores the class information including code_module,
+   *                        code_presentation, course_length
+   * @param dateToSumClicks Map that stores the date and its corresponding sum clicks
+   */
   public Course(String[] courseInfo, Map<Integer, Integer> dateToSumClicks) {
     this.codeModule = courseInfo[ZERO];
     this.codePresentation = courseInfo[ONE];
@@ -22,6 +32,12 @@ public class Course {
     this.dateToSumClicks = dateToSumClicks;
   }
 
+  /**
+   * Updates the date to sum clicks map
+   *
+   * @param dateString      date information
+   * @param sumClicksString sum clicks information
+   */
   public void updateSumClicks(String dateString, String sumClicksString) {
     int date = Integer.parseInt(dateString);
     int sumClicks = Integer.parseInt(sumClicksString);
@@ -33,10 +49,21 @@ public class Course {
     }
   }
 
+  /**
+   * Gets the map that contains the date and its corresponding sum clicks
+   *
+   * @return
+   */
   public Map<Integer, Integer> getDateToSumClicks() {
     return (Map<Integer, Integer>) this.dateToSumClicks;
   }
 
+  /**
+   * Tests the Course object equals to the passed Object o
+   *
+   * @param o the passed Object o
+   * @return boolean that indicates the equality
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -52,12 +79,22 @@ public class Course {
         Objects.equals(this.dateToSumClicks, course.dateToSumClicks);
   }
 
+  /**
+   * Returns the hash code of the Course object
+   *
+   * @return a hash code integer
+   */
   @Override
   public int hashCode() {
     return Objects.hash(this.codeModule, this.codePresentation, this.courseLength,
         this.dateToSumClicks);
   }
 
+  /**
+   * Returns the string represents the Course information
+   *
+   * @return a string about the Course object
+   */
   @Override
   public String toString() {
     return "Course: { code module: " + this.codeModule + "; "
