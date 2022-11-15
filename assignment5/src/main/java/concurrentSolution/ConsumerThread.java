@@ -76,6 +76,8 @@ public class ConsumerThread implements Runnable {
 
 
   private void generateSummary() throws IOException {
+    FileWriter thresholdReportWriter = new FileWriter(new File(summaryOutputPath + SLASH + ACTIVITY_PREFIX + threshold + CSV_EXTENSION));
+    thresholdReportWriter.append(THRESHOLD_REPORT_ROW_FORMAT + NEXT_LINE);
     System.out.println("consumer " + Thread.currentThread().getId() + " output summary!");
 
     Iterator<Entry<String, ConcurrentHashMap<String, AtomicInteger>>> courseIterator = this.coursesMap.entrySet()
@@ -84,17 +86,15 @@ public class ConsumerThread implements Runnable {
       Map.Entry coursePair = (Map.Entry) courseIterator.next();
 
       String courseName = (String) coursePair.getKey();
-      ConcurrentHashMap<String, Integer> courseData = (ConcurrentHashMap<String, Integer>) coursePair.getValue();
+      ConcurrentHashMap<String, AtomicInteger> courseData = (ConcurrentHashMap<String, AtomicInteger>) coursePair.getValue();
 
       FileWriter summaryWriter = new FileWriter(
           new File(summaryOutputPath + SLASH + courseName + CSV_EXTENSION));
       summaryWriter.append(OUTPUT_ROW_FORMAT + NEXT_LINE);
-      FileWriter thresholdReportWriter = new FileWriter(new File(summaryOutputPath + SLASH + ACTIVITY_PREFIX + threshold + CSV_EXTENSION));
-      thresholdReportWriter.append(THRESHOLD_REPORT_ROW_FORMAT + NEXT_LINE);
 
-      for (Map.Entry<String, Integer> entry : courseData.entrySet()) {
+      for (Map.Entry<String, AtomicInteger> entry : courseData.entrySet()) {
         String date = entry.getKey();
-        Integer sumClicksNum = entry.getValue();
+        int sumClicksNum = entry.getValue().intValue();
         String sumClicks = String.valueOf(sumClicksNum);
         summaryWriter.append(QUOTE + date + QUOTE + COMMA + QUOTE + sumClicks + QUOTE + NEXT_LINE);
 
@@ -104,8 +104,8 @@ public class ConsumerThread implements Runnable {
       }
       summaryWriter.flush();
       summaryWriter.close();
-      thresholdReportWriter.flush();
-      thresholdReportWriter.close();
     }
+    thresholdReportWriter.flush();
+    thresholdReportWriter.close();
   }
 }
