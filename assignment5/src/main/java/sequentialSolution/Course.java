@@ -52,7 +52,7 @@ public class Course {
   /**
    * Gets the map that contains the date and its corresponding sum clicks
    *
-   * @return
+   * @return date to sum clicks map
    */
   public Map<Integer, Integer> getDateToSumClicks() {
     return (Map<Integer, Integer>) this.dateToSumClicks;

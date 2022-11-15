@@ -20,11 +20,29 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Driver {
 
+  /**
+   * Path of the course.csv file
+   */
   public static String coursesCsvPath;
+  /**
+   * Path of the studentVle.csv file
+   */
   public static String studentVleCsvPath;
+  /**
+   * Path of the output directory
+   */
   public static String summaryOutputPath;
+  /**
+   * Threshold value provided by the user
+   */
   public static String threshold;
+  /**
+   * Boolean indicates the producer has done reading all data
+   */
   public static boolean readFinished;
+  /**
+   * Boolean indicates the summary files have been all generated
+   */
   public static boolean summaryGenerated;
 
   /**
