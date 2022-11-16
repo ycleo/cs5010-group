@@ -47,11 +47,11 @@ public class ConsumerThread implements Runnable {
    */
   @Override
   public void run() {
-    System.out.println("Starting data Consumer");
+    System.out.println("Consumer start!");
     while (true) {
-      System.out.println("consumer " + Thread.currentThread().getId() + " awake");
+//      System.out.println("consumer " + Thread.currentThread().getId() + " awake");
       try {
-        ArrayList<String> data = this.studentVleBlockingQueue.poll(FIVE * ONE_THOUSAND,
+        ArrayList<String> data = this.studentVleBlockingQueue.poll(TWO * ONE_THOUSAND,
             TimeUnit.MILLISECONDS);
         if (data == null) {
           if (readFinished) {
@@ -63,7 +63,7 @@ public class ConsumerThread implements Runnable {
             continue;
           }
         }
-        System.out.println(data + " has been consumed");
+//        System.out.println(data + " has been consumed");
         String courseName = data.get(ZERO); // module_presentation
         int date = Integer.parseInt(data.get(ONE));
         int sumClicks = Integer.parseInt(data.get(TWO));

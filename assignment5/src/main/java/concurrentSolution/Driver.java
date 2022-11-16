@@ -73,10 +73,12 @@ public class Driver {
     Thread producer = new Thread(new ProducerThread(studentVleBlockingQueue));
     Thread consumer1 = new Thread(new ConsumerThread(studentVleBlockingQueue, coursesMap));
     Thread consumer2 = new Thread(new ConsumerThread(studentVleBlockingQueue, coursesMap));
+    Thread consumer3 = new Thread(new ConsumerThread(studentVleBlockingQueue, coursesMap));
 
     producer.start();
     consumer1.start();
     consumer2.start();
+    consumer3.start();
   }
 
   /**

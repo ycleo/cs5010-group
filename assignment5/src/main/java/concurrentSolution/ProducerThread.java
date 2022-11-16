@@ -38,7 +38,7 @@ public class ProducerThread implements Runnable {
    */
   @Override
   public void run() {
-    System.out.println("Starting data producer");
+    System.out.println("Producer start!");
     try {
       this.csvScanner = new Scanner(new File(studentVleCsvPath));
     } catch (FileNotFoundException e) {
@@ -46,7 +46,7 @@ public class ProducerThread implements Runnable {
     }
     this.studentVleFormat = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
     while (this.csvScanner.hasNext()) {
-      System.out.println("Producer is awake");
+//      System.out.println("Producer is awake");
       try {
         String[] studentVle = trimQuotationMark(this.csvScanner.nextLine().split(INFO_DELIMITER));
 
@@ -59,7 +59,7 @@ public class ProducerThread implements Runnable {
         );
 
         this.studentVleBlockingQueue.put(data);
-        System.out.println(data + " was produced");
+//        System.out.println(data + " was produced");
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
