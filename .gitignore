@@ -27,3 +27,6 @@ hs_err_pid*
 .gradle/
 *.lock
 build/
+.idea/
+
+.DS_Store
