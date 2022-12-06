@@ -46,17 +46,19 @@ public class Client {
       @Override
       public void run() {
         String messageFromChat = null;
-        try {
-          messageFromChat = bufferedReader.readLine();
-          System.out.println(messageFromChat);
-        } catch (IOException e) {
-          closeSocketAndBuffer(socket, bufferedReader, bufferedWriter);
+        while (socket.isConnected()) {
+          try {
+            messageFromChat = bufferedReader.readLine();
+            System.out.println(messageFromChat);
+          } catch (IOException e) {
+            closeSocketAndBuffer(socket, bufferedReader, bufferedWriter);
+          }
         }
       }
     }).start();
   }
 
-  public void closeSocketAndBuffer(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+  public static void closeSocketAndBuffer(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
     try {
       if (bufferedReader != null) {
         bufferedReader.close();
