@@ -28,5 +28,8 @@ hs_err_pid*
 *.lock
 build/
 .idea/
+gradle/
+gradlew
+gradlew.bat
 
 .DS_Store
