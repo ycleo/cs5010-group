@@ -1,4 +1,10 @@
-public class MessageIdentifiers {
+public class Constants {
+  public static final String HELP = "?";
+  public static final String LOGOFF = "logoff";
+  public static final String LIST_ALL_USERS = "who";
+  public static final String TO = "@";
+  public static final String ALL = "all";
+  public static final String INSULT = "!";
   public static final int CONNECT_MESSAGE = 19;
   public static final int CONNECT_RESPONSE = 20;
   public static final int DISCONNECT_MESSAGE = 21;
