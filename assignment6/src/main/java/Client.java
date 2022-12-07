@@ -35,7 +35,7 @@ public class Client {
           sendDisconnectMessage();
         } else if (command.equals(Constants.LIST_ALL_USERS)) {
           sendQueryAllUsers();
-        } else if (command.substring(0, 1).equals(Constants.INSULT)){
+        } else if (command.substring(0, 1).equals(Constants.INSULT)) {
           String recipientUsername = command.substring(1);
           sendInsultMessage(recipientUsername);
         } else if (command.substring(0, 1).equals(Constants.TO)) {
