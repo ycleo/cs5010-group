@@ -2,12 +2,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
  * Client class to send and receive message, and communicate with other clients via the server
  */
 public class Client {
+
   final private int ZERO = 0;
   final private int ONE = 1;
   final private int FOUR = 4;
@@ -20,7 +22,8 @@ public class Client {
 
   /**
    * Constructs client instance
-   * @param socket client socket
+   *
+   * @param socket         client socket
    * @param clientUsername client username
    */
   public Client(Socket socket, String clientUsername) {
@@ -72,17 +75,19 @@ public class Client {
 
   /**
    * Send client username to server
+   *
    * @throws IOException I/O exception
    */
-  public void sendUsername() throws IOException{
-      dataWriter.writeChar(Constants.SPACE);
-      dataWriter.writeInt(clientUsername.length());
-      dataWriter.writeChar(Constants.SPACE);
-      dataWriter.writeUTF(clientUsername);
+  public void sendUsername() throws IOException {
+    dataWriter.writeChar(Constants.SPACE);
+    dataWriter.writeInt(clientUsername.length());
+    dataWriter.writeChar(Constants.SPACE);
+    dataWriter.writeUTF(clientUsername);
   }
 
   /**
    * Send connect message to server
+   *
    * @throws IOException I/O exception
    */
   public void sendConnectMessage() throws IOException {
@@ -92,6 +97,7 @@ public class Client {
 
   /**
    * Send disconnect message to server
+   *
    * @throws IOException I/O exception
    */
   public void sendDisconnectMessage() throws IOException {
@@ -101,6 +107,7 @@ public class Client {
 
   /**
    * Send query connected users message to server
+   *
    * @throws IOException I/O exception
    */
   public void sendQueryConnectedUsers() throws IOException {
@@ -110,6 +117,7 @@ public class Client {
 
   /**
    * Send insult message request to server
+   *
    * @param recipientUsername recipient username
    * @throws IOException I/O exception
    */
@@ -124,6 +132,7 @@ public class Client {
 
   /**
    * Send broadcast message to server
+   *
    * @param message broadcast message
    * @throws IOException I/O exception
    */
@@ -138,8 +147,9 @@ public class Client {
 
   /**
    * Send direct message request to server
+   *
    * @param recipientUsername recipient username
-   * @param message direct message
+   * @param message           direct message
    * @throws IOException I/O exception
    */
   public void sendDirectMessage(String recipientUsername, String message) throws IOException {
@@ -188,6 +198,7 @@ public class Client {
 
   /**
    * Receives connect response message
+   *
    * @throws IOException I/O exception
    */
   public void receiveConnectResponse() throws IOException {
@@ -201,6 +212,7 @@ public class Client {
 
   /**
    * Receives query users response
+   *
    * @throws IOException I/O exception
    */
   public void receiveQueryUsersResponse() throws IOException {
@@ -217,6 +229,7 @@ public class Client {
 
   /**
    * Receives message
+   *
    * @throws IOException I/O exception
    */
   public void receiveMessage() throws IOException {
@@ -227,8 +240,9 @@ public class Client {
 
   /**
    * Close the client socket and the data stream
-   * @param socket client socket
-   * @param dataInputStream client stream reader
+   *
+   * @param socket           client socket
+   * @param dataInputStream  client stream reader
    * @param dataOutputStream client stream writer
    */
   public static void closeSocketAndStream(Socket socket, DataInputStream dataInputStream,
@@ -250,6 +264,7 @@ public class Client {
 
   /**
    * Executes client program
+   *
    * @param args arguments
    * @throws IOException I/O exception
    */
@@ -261,5 +276,49 @@ public class Client {
     Client client = new Client(serverSocket, username);
     client.listenForMessage();
     client.sendMessage();
+  }
+
+  /**
+   * Tests the client object equals to the passed Object o
+   *
+   * @param o the passed Object o
+   * @return boolean that indicates the equality
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+    Client client = (Client) o;
+    return Objects.equals(this.socket, client.socket) ||
+        Objects.equals(this.dataReader, client.dataReader) ||
+        Objects.equals(this.dataWriter, client.dataWriter) ||
+        Objects.equals(this.clientUsername, client.clientUsername);
+  }
+
+  /**
+   * Returns the hash code of the client object
+   *
+   * @return a hash code integer
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.socket, this.dataReader, this.dataWriter, this.clientUsername);
+  }
+
+  /**
+   * Returns the string represents the client information
+   *
+   * @return a string about the client object
+   */
+  @Override
+  public String toString() {
+    return "Client: { socket: " + this.socket.toString() + "; "
+        + "data reader: " + this.dataReader.toString() + "; "
+        + "data writer: " + this.dataWriter.toString() + "; "
+        + "client username: " + this.clientUsername + " }";
   }
 }

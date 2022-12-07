@@ -1,16 +1,19 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Objects;
 
 /**
  * Server class that accept connection from clients and instantiate corresponding client handlers
  */
 public class Server {
+
   final private String connectedMessage = "A new client has connected!";
   private ServerSocket serverSocket;
 
   /**
    * Constructs server instance
+   *
    * @param serverSocket server socket
    */
   public Server(ServerSocket serverSocket) {
@@ -50,6 +53,7 @@ public class Server {
 
   /**
    * Executes the server program
+   *
    * @param args arguments
    * @throws IOException I/O exception
    */
@@ -58,4 +62,43 @@ public class Server {
     Server server = new Server(serverSocket);
     server.startServer();
   }
+
+  /**
+   * Tests the server object equals to the passed Object o
+   *
+   * @param o the passed Object o
+   * @return boolean that indicates the equality
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+    Server server = (Server) o;
+    return Objects.equals(this.serverSocket, server.serverSocket);
+  }
+
+  /**
+   * Returns the hash code of the server object
+   *
+   * @return a hash code integer
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.serverSocket);
+  }
+
+  /**
+   * Returns the string represents the server information
+   *
+   * @return a string about the server object
+   */
+  @Override
+  public String toString() {
+    return "Server: { server socket: " + this.serverSocket.toString() + " }";
+  }
+
 }
