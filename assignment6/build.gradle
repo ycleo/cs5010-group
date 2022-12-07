@@ -13,7 +13,9 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    implementation files('assignment4-1.0.jar')
     implementation 'com.opencsv:opencsv:5.7.1'
+    implementation 'com.github.lbovolini:ObjectMapper:0.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 }
