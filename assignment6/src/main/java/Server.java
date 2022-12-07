@@ -3,6 +3,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+
   private ServerSocket serverSocket;
 
   public Server(ServerSocket serverSocket) {
@@ -11,7 +12,7 @@ public class Server {
 
   public void startServer() {
     try {
-      while(!serverSocket.isClosed()) {
+      while (!serverSocket.isClosed()) {
         Socket socket = serverSocket.accept();
         System.out.println("A new client has connected!");
         ClientHandler clientHandler = new ClientHandler(socket);
@@ -20,7 +21,7 @@ public class Server {
         thread.start();
       }
     } catch (IOException e) {
-
+      e.printStackTrace();
     }
   }
 
@@ -35,7 +36,7 @@ public class Server {
   }
 
   public static void main(String[] args) throws IOException {
-    ServerSocket serverSocket = new ServerSocket(1234);
+    ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT);
     Server server = new Server(serverSocket);
     server.startServer();
   }

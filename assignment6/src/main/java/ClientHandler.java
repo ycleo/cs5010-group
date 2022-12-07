@@ -1,10 +1,12 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable {
 
   public static HashMap<String, ClientHandler> clientHandlers = new HashMap<>();
   private Socket socket;
@@ -17,7 +19,6 @@ public class ClientHandler implements Runnable{
       this.socket = socket;
       this.dataReader = new DataInputStream(socket.getInputStream());
       this.dataWriter = new DataOutputStream(socket.getOutputStream());
-      this.clientUsername = dataReader.readUTF();
     } catch (IOException e) {
       removeClientHandler();
     }
@@ -66,11 +67,11 @@ public class ClientHandler implements Runnable{
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeBoolean(true);
       dataWriter.writeChar(Constants.SPACE);
-      String response = "There are " + clientHandlers.size() + " other connected clients.";
+      String response = "There are " + (clientHandlers.size() - 1) + " other connected clients.";
       dataWriter.writeInt(response.length());
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeUTF(response);
-    } catch (IOException e){
+    } catch (IOException e) {
       dataWriter.writeInt(Constants.CONNECT_RESPONSE);
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeBoolean(false);
@@ -100,7 +101,7 @@ public class ClientHandler implements Runnable{
       dataWriter.writeUTF(response);
 
       removeClientHandler();
-    } catch (IOException e){
+    } catch (IOException e) {
       dataWriter.writeInt(Constants.CONNECT_RESPONSE);
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeBoolean(false);
@@ -116,21 +117,21 @@ public class ClientHandler implements Runnable{
     try {
       int usernameLength = dataReader.readInt();
       dataReader.readChar();
-      clientUsername = dataReader.readUTF();
+      String senderUsername = dataReader.readUTF();
 
       dataWriter.writeInt(Constants.QUERY_USER_RESPONSE);
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeInt(clientHandlers.size() - 1); // number of other users
 
       for (String username : clientHandlers.keySet()) {
-        if (!clientUsername.equals(username)) {
+        if (!username.equals(senderUsername)) {
           dataWriter.writeChar(Constants.SPACE);
-          dataWriter.write(username.length());
+          dataWriter.writeInt(username.length());
           dataWriter.writeChar(Constants.SPACE);
           dataWriter.writeUTF(username);
         }
       }
-    } catch (IOException e){
+    } catch (IOException e) {
       dataWriter.writeInt(Constants.QUERY_USER_RESPONSE);
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeInt(0);
@@ -138,53 +139,62 @@ public class ClientHandler implements Runnable{
   }
 
   public void handleBroadcastMessage() throws IOException {
-      int usernameLength = dataReader.readInt();
-      dataReader.readChar();
-      String senderUsername = dataReader.readUTF();
+    int usernameLength = dataReader.readInt();
+    dataReader.readChar();
+    String senderUsername = dataReader.readUTF();
 
-      if (clientHandlers.containsKey(senderUsername)) {
-        dataReader.readChar();
-        int messageLength = dataReader.readInt();
-        dataReader.readChar();
-        String message = dataReader.readUTF();
-
-        for (ClientHandler clientHandler: clientHandlers.values()) {
-            clientHandler.dataWriter.writeUTF(senderUsername + " -> all: " + message + "\n");
-        }
-      } else {
-        responseFailedMessage(senderUsername);
-      }
-  }
-
-  public void handleDirectMessage() throws IOException {
-      int senderUsernameLength = dataReader.readInt();
-      dataReader.readChar();
-      String senderUsername = dataReader.readUTF();
-      dataReader.readChar();
-      int recipientUsernameLength = dataReader.readInt();
-      dataReader.readChar();
-      String recipientUsername = dataReader.readUTF();
+    if (clientHandlers.containsKey(senderUsername)) {
       dataReader.readChar();
       int messageLength = dataReader.readInt();
       dataReader.readChar();
-      String message = dataReader.readUTF();
+      String message = senderUsername + " -> all: " + dataReader.readUTF();
 
-      if (clientHandlers.containsKey(senderUsername)) {
-        ClientHandler recipientClientHandler = clientHandlers.get(recipientUsername);
-        recipientClientHandler.dataWriter.writeUTF(senderUsername + " -> " + recipientUsername + ": " + message + "\n");
-      } else {
-        responseFailedMessage(senderUsername);
+      for (ClientHandler clientHandler : clientHandlers.values()) {
+        clientHandler.dataWriter.writeInt(Constants.BROADCAST_MESSAGE);
+        clientHandler.dataWriter.writeChar(Constants.SPACE);
+        clientHandler.dataWriter.writeInt(message.length());
+        clientHandler.dataWriter.writeChar(Constants.SPACE);
+        clientHandler.dataWriter.writeUTF(message);
       }
+    } else {
+      responseFailedMessage(senderUsername);
+    }
   }
 
-  public void responseFailedMessage(String senderUsername) throws IOException {
-    ClientHandler senderClientHandler = clientHandlers.get(senderUsername);
-    senderClientHandler.dataWriter.writeInt(Constants.FAILED_MESSAGE);
-    senderClientHandler.dataWriter.writeChar(Constants.SPACE);
-    String failedMessage = "Invalid sender username";
-    senderClientHandler.dataWriter.writeInt(failedMessage.length());
-    senderClientHandler.dataWriter.writeChar(Constants.SPACE);
-    senderClientHandler.dataWriter.writeUTF(failedMessage);
+  public void handleDirectMessage() throws IOException {
+    int senderUsernameLength = dataReader.readInt();
+    dataReader.readChar();
+    String senderUsername = dataReader.readUTF();
+    dataReader.readChar();
+    int recipientUsernameLength = dataReader.readInt();
+    dataReader.readChar();
+    String recipientUsername = dataReader.readUTF();
+    dataReader.readChar();
+    int messageLength = dataReader.readInt();
+    dataReader.readChar();
+    String message = senderUsername + " -> " + recipientUsername + ": " + dataReader.readUTF();
+
+    if (!clientHandlers.containsKey(senderUsername)) {
+      responseFailedMessage(senderUsername);
+    } else if (!clientHandlers.containsKey(recipientUsername)) {
+      responseFailedMessage(recipientUsername);
+    } else {
+      ClientHandler recipientClientHandler = clientHandlers.get(recipientUsername);
+      recipientClientHandler.dataWriter.writeInt(Constants.DIRECT_MESSAGE);
+      recipientClientHandler.dataWriter.writeChar(Constants.SPACE);
+      recipientClientHandler.dataWriter.writeInt(message.length());
+      recipientClientHandler.dataWriter.writeChar(Constants.SPACE);
+      recipientClientHandler.dataWriter.writeUTF(message);
+    }
+  }
+
+  public void responseFailedMessage(String username) throws IOException {
+    dataWriter.writeInt(Constants.FAILED_MESSAGE);
+    dataWriter.writeChar(Constants.SPACE);
+    String failedMessage = username + " is a invalid username";
+    dataWriter.writeInt(failedMessage.length());
+    dataWriter.writeChar(Constants.SPACE);
+    dataWriter.writeUTF(failedMessage);
   }
 
   public void removeClientHandler() {
