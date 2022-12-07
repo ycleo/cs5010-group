@@ -4,13 +4,25 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Client class to send and receive message, and communicate with other clients via the server
+ */
 public class Client {
-
+  final private int ZERO = 0;
+  final private int ONE = 1;
+  final private int FOUR = 4;
+  final private String SPACE = " ";
+  final private String INVALID_USERNAME_MESSAGE = "Please type in a valid command.";
   private Socket socket;
   private DataInputStream dataReader;
   private DataOutputStream dataWriter;
   private String clientUsername;
 
+  /**
+   * Constructs client instance
+   * @param socket client socket
+   * @param clientUsername client username
+   */
   public Client(Socket socket, String clientUsername) {
     try {
       this.socket = socket;
@@ -22,6 +34,9 @@ public class Client {
     }
   }
 
+  /**
+   * send message based on different command instructions
+   */
   public void sendMessage() {
     try {
       sendConnectMessage();
@@ -34,20 +49,20 @@ public class Client {
         } else if (command.equals(Constants.LOGOFF)) {
           sendDisconnectMessage();
         } else if (command.equals(Constants.LIST_ALL_USERS)) {
-          sendQueryAllUsers();
-        } else if (command.substring(0, 1).equals(Constants.INSULT)) {
-          String recipientUsername = command.substring(1);
+          sendQueryConnectedUsers();
+        } else if (command.substring(ZERO, ONE).equals(Constants.INSULT)) {
+          String recipientUsername = command.substring(ONE);
           sendInsultMessage(recipientUsername);
-        } else if (command.substring(0, 1).equals(Constants.TO)) {
-          String message = command.substring(command.indexOf(" "));
-          if (command.substring(1, 4).equals(Constants.ALL)) {
+        } else if (command.substring(ZERO, ONE).equals(Constants.TO)) {
+          String message = command.substring(command.indexOf(SPACE));
+          if (command.substring(ONE, FOUR).equals(Constants.ALL)) {
             sendBroadcastMessage(message);
           } else {
-            String recipientUsername = command.substring(1, command.indexOf(" "));
+            String recipientUsername = command.substring(ONE, command.indexOf(SPACE));
             sendDirectMessage(recipientUsername, message);
           }
         } else {
-          System.out.println("Please type in a valid command.");
+          System.out.println(INVALID_USERNAME_MESSAGE);
         }
       }
     } catch (IOException e) {
@@ -55,32 +70,49 @@ public class Client {
     }
   }
 
-  public void sendUsername() {
-    try {
+  /**
+   * Send client username to server
+   * @throws IOException I/O exception
+   */
+  public void sendUsername() throws IOException{
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeInt(clientUsername.length());
       dataWriter.writeChar(Constants.SPACE);
       dataWriter.writeUTF(clientUsername);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
+  /**
+   * Send connect message to server
+   * @throws IOException I/O exception
+   */
   public void sendConnectMessage() throws IOException {
     dataWriter.writeInt(Constants.CONNECT_MESSAGE);
     sendUsername();
   }
 
+  /**
+   * Send disconnect message to server
+   * @throws IOException I/O exception
+   */
   public void sendDisconnectMessage() throws IOException {
     dataWriter.writeInt(Constants.DISCONNECT_MESSAGE);
     sendUsername();
   }
 
-  public void sendQueryAllUsers() throws IOException {
+  /**
+   * Send query connected users message to server
+   * @throws IOException I/O exception
+   */
+  public void sendQueryConnectedUsers() throws IOException {
     dataWriter.writeInt(Constants.QUERY_CONNECTED_USERS);
     sendUsername();
   }
 
+  /**
+   * Send insult message request to server
+   * @param recipientUsername recipient username
+   * @throws IOException I/O exception
+   */
   public void sendInsultMessage(String recipientUsername) throws IOException {
     dataWriter.writeInt(Constants.SEND_INSULT);
     sendUsername();
@@ -90,6 +122,11 @@ public class Client {
     dataWriter.writeUTF(recipientUsername);
   }
 
+  /**
+   * Send broadcast message to server
+   * @param message broadcast message
+   * @throws IOException I/O exception
+   */
   public void sendBroadcastMessage(String message) throws IOException {
     dataWriter.writeInt(Constants.BROADCAST_MESSAGE);
     sendUsername();
@@ -99,6 +136,12 @@ public class Client {
     dataWriter.writeUTF(message);
   }
 
+  /**
+   * Send direct message request to server
+   * @param recipientUsername recipient username
+   * @param message direct message
+   * @throws IOException I/O exception
+   */
   public void sendDirectMessage(String recipientUsername, String message) throws IOException {
     dataWriter.writeInt(Constants.DIRECT_MESSAGE);
     sendUsername();
@@ -112,6 +155,9 @@ public class Client {
     dataWriter.writeUTF(message);
   }
 
+  /**
+   * Creates another runnable thread to listen to message from the server
+   */
   public void listenForMessage() {
     new Thread(new Runnable() {
       @Override
@@ -126,9 +172,9 @@ public class Client {
                 receiveConnectResponse();
                 break;
               case Constants.QUERY_USER_RESPONSE:
-                receiveQueryUserResponse();
+                receiveQueryUsersResponse();
                 break;
-              case Constants.FAILED_MESSAGE, Constants.BROADCAST_MESSAGE, Constants.DIRECT_MESSAGE, Constants.SEND_INSULT:
+              default:
                 receiveMessage();
                 break;
             }
@@ -140,6 +186,10 @@ public class Client {
     }).start();
   }
 
+  /**
+   * Receives connect response message
+   * @throws IOException I/O exception
+   */
   public void receiveConnectResponse() throws IOException {
     boolean success = dataReader.readBoolean();
     dataReader.readChar();
@@ -149,7 +199,11 @@ public class Client {
     System.out.println(message);
   }
 
-  public void receiveQueryUserResponse() throws IOException {
+  /**
+   * Receives query users response
+   * @throws IOException I/O exception
+   */
+  public void receiveQueryUsersResponse() throws IOException {
     System.out.print("OTHER connected users: ");
     int numberOfUsers = dataReader.readInt();
     for (int i = 0; i < numberOfUsers; i++) {
@@ -161,12 +215,22 @@ public class Client {
     System.out.print("\n");
   }
 
+  /**
+   * Receives message
+   * @throws IOException I/O exception
+   */
   public void receiveMessage() throws IOException {
     dataReader.readInt();
     dataReader.readChar();
     System.out.println(dataReader.readUTF());
   }
 
+  /**
+   * Close the client socket and the data stream
+   * @param socket client socket
+   * @param dataInputStream client stream reader
+   * @param dataOutputStream client stream writer
+   */
   public static void closeSocketAndStream(Socket socket, DataInputStream dataInputStream,
       DataOutputStream dataOutputStream) {
     try {
@@ -184,6 +248,11 @@ public class Client {
     }
   }
 
+  /**
+   * Executes client program
+   * @param args arguments
+   * @throws IOException I/O exception
+   */
   public static void main(String[] args) throws IOException {
     Scanner scanner = new Scanner(System.in);
     System.out.print("Enter your username: ");
