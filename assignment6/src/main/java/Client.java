@@ -1,5 +1,3 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -37,6 +35,9 @@ public class Client {
           sendDisconnectMessage();
         } else if (command.equals(Constants.LIST_ALL_USERS)) {
           sendQueryAllUsers();
+        } else if (command.substring(0, 1).equals(Constants.INSULT)){
+          String recipientUsername = command.substring(1);
+          sendInsultMessage(recipientUsername);
         } else if (command.substring(0, 1).equals(Constants.TO)) {
           String message = command.substring(command.indexOf(" "));
           if (command.substring(1, 4).equals(Constants.ALL)) {
@@ -80,6 +81,15 @@ public class Client {
     sendUsername();
   }
 
+  public void sendInsultMessage(String recipientUsername) throws IOException {
+    dataWriter.writeInt(Constants.SEND_INSULT);
+    sendUsername();
+    dataWriter.writeChar(Constants.SPACE);
+    dataWriter.writeInt(recipientUsername.length());
+    dataWriter.writeChar(Constants.SPACE);
+    dataWriter.writeUTF(recipientUsername);
+  }
+
   public void sendBroadcastMessage(String message) throws IOException {
     dataWriter.writeInt(Constants.BROADCAST_MESSAGE);
     sendUsername();
@@ -118,7 +128,7 @@ public class Client {
               case Constants.QUERY_USER_RESPONSE:
                 receiveQueryUserResponse();
                 break;
-              case Constants.FAILED_MESSAGE, Constants.BROADCAST_MESSAGE, Constants.DIRECT_MESSAGE:
+              case Constants.FAILED_MESSAGE, Constants.BROADCAST_MESSAGE, Constants.DIRECT_MESSAGE, Constants.SEND_INSULT:
                 receiveMessage();
                 break;
             }

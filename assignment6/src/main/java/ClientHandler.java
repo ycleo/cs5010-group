@@ -1,5 +1,7 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+
+import assignment4.FileUtils;
+import assignment4.Grammar;
+import assignment4.SentenceGenerator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -47,6 +49,7 @@ public class ClientHandler implements Runnable {
             handleDirectMessage();
             break;
           case Constants.SEND_INSULT:
+            handleInsultMessage();
             break;
         }
       } catch (IOException e) {
@@ -185,6 +188,37 @@ public class ClientHandler implements Runnable {
       recipientClientHandler.dataWriter.writeInt(message.length());
       recipientClientHandler.dataWriter.writeChar(Constants.SPACE);
       recipientClientHandler.dataWriter.writeUTF(message);
+    }
+  }
+
+  public void handleInsultMessage() throws IOException {
+    FileUtils fileUtils = new FileUtils();
+    Grammar grammar = fileUtils.readGrammar("./testFiles/grammars/insult_grammar.json");
+    SentenceGenerator sentenceGenerator = new SentenceGenerator();
+    String insult = sentenceGenerator.generateSentences(grammar);
+
+    int senderUsernameLength = dataReader.readInt();
+    dataReader.readChar();
+    String senderUsername = dataReader.readUTF();
+    dataReader.readChar();
+    int recipientUsernameLength = dataReader.readInt();
+    dataReader.readChar();
+
+    String recipientUsername = dataReader.readUTF();
+    String insultMessage = senderUsername + " insults " + recipientUsername + ": " + insult;
+
+    if (!clientHandlers.containsKey(senderUsername)) {
+      responseFailedMessage(senderUsername);
+    } else if (!clientHandlers.containsKey(recipientUsername)) {
+      responseFailedMessage(recipientUsername);
+    } else {
+      for (ClientHandler clientHandler : clientHandlers.values()) {
+        clientHandler.dataWriter.writeInt(Constants.SEND_INSULT);
+        clientHandler.dataWriter.writeChar(Constants.SPACE);
+        clientHandler.dataWriter.writeInt(insultMessage.length());
+        clientHandler.dataWriter.writeChar(Constants.SPACE);
+        clientHandler.dataWriter.writeUTF(insultMessage);
+      }
     }
   }
 
