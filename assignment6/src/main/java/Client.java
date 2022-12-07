@@ -14,6 +14,8 @@ public class Client {
   final private int ONE = 1;
   final private int FOUR = 4;
   final private String SPACE = " ";
+  final static private String ENTER_YOUR_USERNAME = "Enter your username: ";
+  final private String OTHER_CONNECTED_USERS = "OTHER connected users: ";
   final private String INVALID_USERNAME_MESSAGE = "Please type in a valid command.";
   private Socket socket;
   private DataInputStream dataReader;
@@ -35,6 +37,22 @@ public class Client {
     } catch (IOException e) {
       closeSocketAndStream(socket, dataReader, dataWriter);
     }
+  }
+
+  /**
+   * Executes client program
+   *
+   * @param args arguments
+   * @throws IOException I/O exception
+   */
+  public static void main(String[] args) throws IOException {
+    Scanner scanner = new Scanner(System.in);
+    System.out.print(ENTER_YOUR_USERNAME);
+    String username = scanner.nextLine();
+    Socket serverSocket = new Socket(Constants.LOCAL_HOST, Constants.SERVER_PORT);
+    Client client = new Client(serverSocket, username);
+    client.listenForMessage();
+    client.sendMessage();
   }
 
   /**
@@ -216,15 +234,15 @@ public class Client {
    * @throws IOException I/O exception
    */
   public void receiveQueryUsersResponse() throws IOException {
-    System.out.print("OTHER connected users: ");
+    System.out.print(OTHER_CONNECTED_USERS);
     int numberOfUsers = dataReader.readInt();
-    for (int i = 0; i < numberOfUsers; i++) {
+    for (int i = ZERO; i < numberOfUsers; i++) {
       dataReader.readChar();
       dataReader.readInt();
       dataReader.readChar();
-      System.out.print(dataReader.readUTF() + " ");
+      System.out.print(dataReader.readUTF() + SPACE);
     }
-    System.out.print("\n");
+    System.out.println();
   }
 
   /**
@@ -262,21 +280,6 @@ public class Client {
     }
   }
 
-  /**
-   * Executes client program
-   *
-   * @param args arguments
-   * @throws IOException I/O exception
-   */
-  public static void main(String[] args) throws IOException {
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("Enter your username: ");
-    String username = scanner.nextLine();
-    Socket serverSocket = new Socket(Constants.LOCAL_HOST, Constants.SERVER_PORT);
-    Client client = new Client(serverSocket, username);
-    client.listenForMessage();
-    client.sendMessage();
-  }
 
   /**
    * Tests the client object equals to the passed Object o

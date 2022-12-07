@@ -21,6 +21,18 @@ public class Server {
   }
 
   /**
+   * Executes the server program
+   *
+   * @param args arguments
+   * @throws IOException I/O exception
+   */
+  public static void main(String[] args) throws IOException {
+    ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT);
+    Server server = new Server(serverSocket);
+    server.startServer();
+  }
+
+  /**
    * Starts the server
    */
   public void startServer() {
@@ -49,18 +61,6 @@ public class Server {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * Executes the server program
-   *
-   * @param args arguments
-   * @throws IOException I/O exception
-   */
-  public static void main(String[] args) throws IOException {
-    ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT);
-    Server server = new Server(serverSocket);
-    server.startServer();
   }
 
   /**
