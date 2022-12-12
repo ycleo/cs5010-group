@@ -17,6 +17,8 @@ dependencies {
     implementation 'com.opencsv:opencsv:5.7.1'
     implementation 'com.github.lbovolini:ObjectMapper:0.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testImplementation 'org.mockito:mockito-inline:4.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 }
 pmd {
@@ -86,6 +88,7 @@ task doAll {
     println 'all done!'
 }
 test {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     useJUnitPlatform()
     finalizedBy jacocoTestReport
 }
