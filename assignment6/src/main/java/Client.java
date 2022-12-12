@@ -28,7 +28,7 @@ public class Client {
    * @param socket         client socket
    * @param clientUsername client username
    */
-  public Client(Socket socket, String clientUsername) {
+  public Client(final Socket socket, final String clientUsername) {
     try {
       this.socket = socket;
       this.dataReader = new DataInputStream(socket.getInputStream());
@@ -45,7 +45,7 @@ public class Client {
    * @param args arguments
    * @throws IOException I/O exception
    */
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     Scanner scanner = new Scanner(System.in);
     System.out.print(ENTER_YOUR_USERNAME);
     String username = scanner.nextLine();
@@ -170,7 +170,7 @@ public class Client {
    * @param message           direct message
    * @throws IOException I/O exception
    */
-  public void sendDirectMessage(String recipientUsername, String message) throws IOException {
+  public void sendDirectMessage(final String recipientUsername, final String message) throws IOException {
     dataWriter.writeInt(Constants.DIRECT_MESSAGE);
     sendUsername();
     dataWriter.writeChar(Constants.SPACE);
@@ -263,8 +263,8 @@ public class Client {
    * @param dataInputStream  client stream reader
    * @param dataOutputStream client stream writer
    */
-  public static void closeSocketAndStream(Socket socket, DataInputStream dataInputStream,
-      DataOutputStream dataOutputStream) {
+  public static void closeSocketAndStream(final Socket socket, final DataInputStream dataInputStream,
+      final DataOutputStream dataOutputStream) {
     try {
       if (dataInputStream != null) {
         dataInputStream.close();
@@ -280,6 +280,21 @@ public class Client {
     }
   }
 
+  /**
+   * get data reader
+   * @return DataInputStream
+   */
+  public DataInputStream getDataReader() {
+    return this.dataReader;
+  }
+
+  /**
+   * getDataWriter
+   * @return DataOutputStream
+   */
+  public DataOutputStream getDataWriter() {
+    return this.dataWriter;
+  }
 
   /**
    * Tests the client object equals to the passed Object o
@@ -288,7 +303,7 @@ public class Client {
    * @return boolean that indicates the equality
    */
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -296,9 +311,7 @@ public class Client {
       return false;
     }
     Client client = (Client) o;
-    return Objects.equals(this.socket, client.socket) ||
-        Objects.equals(this.dataReader, client.dataReader) ||
-        Objects.equals(this.dataWriter, client.dataWriter) ||
+    return Objects.equals(this.socket, client.socket) &&
         Objects.equals(this.clientUsername, client.clientUsername);
   }
 
