@@ -1,4 +1,6 @@
-### Getting Started
+# Multi-Threaded Chat Application (Assignment 6)
+
+### Getting Started (IDE used: IntelliJ IDEA)
 1. At <code>Server.java</code>, execute the <code>main</code> function.
 2. At <code>Client.java</code>, execute the <code>main</code> function to generate the first client.
 3. Edit configuration to allow multiple client instances<br>
